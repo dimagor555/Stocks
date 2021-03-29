@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph.xml"
+            app:startDestination="@id/stocks_dest">
+    <fragment
+            android:id="@+id/stocks_dest"
+            android:name="ru.dimagor555.stocks.ui.stocks.StocksFragment"
+            android:label="fragment_stocks"
+            tools:layout="@layout/fragment_stocks">
+        <action
+                android:id="@+id/action_stocks_dest_to_search_dest"
+                app:destination="@id/search_dest"/>
+    </fragment>
+    <fragment
+            android:id="@+id/search_dest"
+            android:name="ru.dimagor555.stocks.ui.search.SearchFragment"
+            android:label="fragment_search"
+            tools:layout="@layout/fragment_search">
+        <action
+                android:id="@+id/action_search_dest_to_stocks_dest"
+                app:destination="@id/stocks_dest"/>
+    </fragment>
+</navigation>

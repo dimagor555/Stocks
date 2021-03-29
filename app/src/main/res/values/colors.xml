@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1A1A1A</color>
+    <color name="colorPrimaryDark">#1A1A1A</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#000000</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <color name="colorTextActive">#1A1A1A</color>
+    <color name="colorTextInactive">#BABABA</color>
+
+    <color name="colorGreen">#24B25D</color>
+    <color name="colorRed">#B22424</color>
+
+    <color name="colorSearchHistoryItem">#F0F4F7</color>
+</resources>

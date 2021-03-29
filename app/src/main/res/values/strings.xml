@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Stocks</string>
+    <string name="stocks">Stocks</string>
+    <string name="favourite">Favourite</string>
+    <string name="network_error">Network error</string>
+    <string name="network_error_message">Please check your internet connection and try again</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="ok">OK</string>
+    <string name="api_limit_error">Api limit reached error</string>
+    <string name="api_limit_error_message">Please wait 1 minute for the API limit to be reset and all data will be loaded automatically</string>
+    <string name="find_company_or_ticker">Find company or ticker</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="favorite_list_empty">Favourite list is empty</string>
+    <string name="you_ve_searched_for_this">You\'ve searched for this</string>
+    <string name="favourite_add_instruction">Click on a star to add stock in favourite</string>
+    <string name="search_frag_hold_to_delete">Hold on element to delete it from history</string>
+</resources>

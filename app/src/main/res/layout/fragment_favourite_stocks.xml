@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   tools:context=".ui.favouritestocks.FavouriteStocksFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/favourite_stocks_frag_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/list_item_stock"/>
+
+    <LinearLayout
+            android:id="@+id/favourite_stocks_frag_favorite_list_empty_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/favorite_list_empty"
+                android:textSize="30sp"
+                android:textFontWeight="900"
+                android:textAlignment="center"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/favourite_add_instruction"
+                android:textSize="18sp"
+                android:textFontWeight="600"
+                android:textAlignment="center"
+                android:alpha="0.6"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

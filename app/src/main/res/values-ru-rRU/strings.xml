@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ценные бумаги</string>
+    <string name="stocks">Акции</string>
+    <string name="favourite">Избранные</string>
+    <string name="network_error">Ошибка соединения с сетью</string>
+    <string name="network_error_message">Пожалуйста, проверьте ваше соединение с интернетом и повторите попытку позже</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="ok">ОК</string>
+    <string name="api_limit_error">Ошибка достижения лимита API</string>
+    <string name="api_limit_error_message">Пожалуйста, подождите 1 минуту пока лимит API восстановится и все данные будут автоматически загружены</string>
+    <string name="find_company_or_ticker">Найти компанию или тикер</string>
+    <string name="nothing_found">Ничего не найдено</string>
+    <string name="favorite_list_empty">Список избранных пуст</string>
+    <string name="you_ve_searched_for_this">Вы уже искали это</string>
+    <string name="favourite_add_instruction">Нажмите на звёздочку, чтобы добавить акцию в избранные</string>
+    <string name="search_frag_hold_to_delete">Удерживайте на элементе для удаления его из истории</string>
+</resources>

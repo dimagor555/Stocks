@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="stocks_frag_app_tabs_height">55dp</dimen>
+    <dimen name="stocks_frag_toolbar_height">65dp</dimen>
+    <dimen name="box_radius_edit_text_search">24dp</dimen>
+</resources>

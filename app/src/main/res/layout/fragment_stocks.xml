@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     android:orientation="vertical"
+                                                     tools:context=".ui.stocks.StocksFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/stocks_frag_app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/stocks_frag_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                style="@style/Widget.MaterialComponents.Toolbar.Surface"
+                app:contentInsetStart="0dp">
+
+            <include layout="@layout/edit_text_search"/>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/stocks_frag_tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/stocks_frag_app_tabs_height"
+                style="@style/StocksFragment.TabLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp">
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stocks"/>
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favourite"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/all_stocks_frag_progress_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/stocks_frag_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/stocks_frag_app_tabs_height"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

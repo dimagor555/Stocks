@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_text_field_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/find_company_or_ticker"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/outline_search_24"
+            app:endIconCheckable="false"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            app:boxCornerRadiusTopStart="@dimen/box_radius_edit_text_search"
+            app:boxCornerRadiusBottomStart="@dimen/box_radius_edit_text_search"
+            app:boxCornerRadiusBottomEnd="@dimen/box_radius_edit_text_search"
+            app:boxCornerRadiusTopEnd="@dimen/box_radius_edit_text_search">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionDone"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</FrameLayout>
