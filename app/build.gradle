@@ -86,7 +86,12 @@ dependencies {
     implementation "androidx.paging:paging-runtime:$paging_version"
     implementation "androidx.paging:paging-rxjava2:$paging_version"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
+    implementation 'org.mockito:mockito-core:3.8.0'
+    implementation 'org.powermock:powermock-module-junit4:2.0.9'
+    implementation 'org.powermock:powermock-api-mockito2:2.0.9'
+
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
