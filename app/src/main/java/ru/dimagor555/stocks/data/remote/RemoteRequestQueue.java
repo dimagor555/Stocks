@@ -7,7 +7,7 @@ import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import ru.dimagor555.stocks.data.local.stock.LocalStockDatasource;
 import ru.dimagor555.stocks.data.model.stock.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockCompanyInfo;
@@ -36,7 +36,7 @@ public class RemoteRequestQueue {
     private volatile boolean apiLimitReached = false;
 
     private final CompositeDisposable disposeBag = new CompositeDisposable();
-    private final BehaviorSubject<Exception> networkErrorsObservable = BehaviorSubject.create();
+    private final PublishSubject<Exception> networkErrorsObservable = PublishSubject.create();
 
     public RemoteRequestQueue(RemoteStockDatasource remoteStockDatasource,
                               LocalStockDatasource localStockDatasource) {
