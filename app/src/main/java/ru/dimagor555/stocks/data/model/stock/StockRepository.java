@@ -10,7 +10,7 @@ public interface StockRepository {
 
     Flowable<Boolean> isFavouriteListEmpty();
 
-    Flowable<PagingData<Stock>> searchByTickerAndCompanyName(String request);
+    Flowable<PagingData<Stock>> findByTickerAndCompanyName(String request);
 
     boolean hasSearchResultByTickerAndCompanyName(String request);
 

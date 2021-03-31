@@ -38,8 +38,8 @@ public class StockRepositoryImpl implements StockRepository {
     }
 
     @Override
-    public Flowable<PagingData<Stock>> searchByTickerAndCompanyName(String request) {
-        return localRepository.searchByTickerAndCompanyName(request);
+    public Flowable<PagingData<Stock>> findByTickerAndCompanyName(String request) {
+        return localRepository.findByTickerAndCompanyName(request);
     }
 
     @Override

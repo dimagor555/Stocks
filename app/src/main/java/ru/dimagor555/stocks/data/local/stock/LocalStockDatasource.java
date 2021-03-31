@@ -34,7 +34,7 @@ public class LocalStockDatasource {
         return dao.getFavouriteCount().map(count -> count == 0);
     }
 
-    public Flowable<PagingData<Stock>> searchByTickerAndCompanyName(String request) {
+    public Flowable<PagingData<Stock>> findByTickerAndCompanyName(String request) {
         return createFlowableStockPagingDataFromPagingSource(() ->
                 dao.findByTickerAndCompanyName("%" + request + "%"));
     }

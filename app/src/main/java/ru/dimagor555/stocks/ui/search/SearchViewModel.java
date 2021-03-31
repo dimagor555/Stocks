@@ -70,7 +70,7 @@ public class SearchViewModel extends StocksBaseViewModel {
 
     private void loadSearchResult(String request) {
         Flowable<PagingData<Stock>> searchResult =
-                cacheInPagingRx(stockRepository.searchByTickerAndCompanyName(request));
+                cacheInPagingRx(stockRepository.findByTickerAndCompanyName(request));
 
         redirectFlowableToLiveData(
                 searchResult,
