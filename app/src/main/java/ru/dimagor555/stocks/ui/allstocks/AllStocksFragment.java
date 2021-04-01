@@ -8,13 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
-import ru.dimagor555.stocks.Injection;
+import dagger.hilt.android.AndroidEntryPoint;
 import ru.dimagor555.stocks.R;
 import ru.dimagor555.stocks.ui.stockitem.StockItemAdapter;
 import ru.dimagor555.stocks.ui.stocks.StocksViewModel;
 
+@AndroidEntryPoint
 public class AllStocksFragment extends Fragment {
     private AlertDialog alertDialog;
     private RecyclerView recyclerViewStocks;
@@ -31,7 +33,7 @@ public class AllStocksFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        viewModel = Injection.provideStocksViewModel(getParentFragment());
+        viewModel = new ViewModelProvider(getParentFragment()).get(StocksViewModel.class);
         recyclerViewStocks = view.findViewById(R.id.all_stocks_frag_recycler_view);
 
         initStocksRecyclerView();

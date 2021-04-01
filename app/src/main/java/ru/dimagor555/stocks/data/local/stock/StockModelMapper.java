@@ -4,7 +4,13 @@ import ru.dimagor555.stocks.data.model.stock.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockCompanyInfo;
 import ru.dimagor555.stocks.data.model.stock.StockPrice;
 
+import javax.inject.Inject;
+
 public class StockModelMapper {
+    @Inject
+    public StockModelMapper() {
+    }
+
     public StockModel toModel(Stock stock) {
         StockCompanyInfo companyInfo = stock.getCompanyInfo();
         StockPrice price = stock.getPrice();

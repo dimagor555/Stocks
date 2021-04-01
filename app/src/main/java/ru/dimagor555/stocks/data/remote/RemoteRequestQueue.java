@@ -16,6 +16,8 @@ import ru.dimagor555.stocks.data.remote.exception.ApiLimitReachedException;
 import ru.dimagor555.stocks.data.remote.exception.NetworkErrorException;
 import ru.dimagor555.stocks.data.remote.exception.UnknownErrorException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * This class is wrapper for remote datasource. It controls api limit and order of request.
  * Automatically updates fetched data to local db
  */
+@Singleton
 public class RemoteRequestQueue {
     //Api limit is 60 calls per minute
     private final static int MAX_CONCURRENT_REQUESTS = 10;
@@ -38,6 +41,7 @@ public class RemoteRequestQueue {
     private final CompositeDisposable disposeBag = new CompositeDisposable();
     private final PublishSubject<Exception> networkErrorsObservable = PublishSubject.create();
 
+    @Inject
     public RemoteRequestQueue(RemoteStockDatasource remoteStockDatasource,
                               LocalStockDatasource localStockDatasource) {
         this.remoteStockDatasource = remoteStockDatasource;

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.appbar.AppBarLayout;
@@ -14,9 +15,10 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-import ru.dimagor555.stocks.Injection;
+import dagger.hilt.android.AndroidEntryPoint;
 import ru.dimagor555.stocks.R;
 
+@AndroidEntryPoint
 public class StocksFragment extends Fragment {
     @Nullable
     @Override
@@ -51,7 +53,7 @@ public class StocksFragment extends Fragment {
         CircularProgressIndicator progressIndicator = view
                 .findViewById(R.id.all_stocks_frag_progress_indicator);
 
-        StocksViewModel viewModel = Injection.provideStocksViewModel(this);
+        StocksViewModel viewModel = new ViewModelProvider(this).get(StocksViewModel.class);
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
             if (!loading) {
                 progressIndicator.hide();

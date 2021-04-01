@@ -3,6 +3,7 @@ package ru.dimagor555.stocks.data.model.searchhistory;
 import io.reactivex.Flowable;
 import ru.dimagor555.stocks.data.local.searchhistory.LocalSearchHistoryRequestDatasource;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class SearchHistoryRepositoryImpl implements SearchHistoryRepository {
@@ -10,6 +11,7 @@ public class SearchHistoryRepositoryImpl implements SearchHistoryRepository {
 
     private final LocalSearchHistoryRequestDatasource localDatasource;
 
+    @Inject
     public SearchHistoryRepositoryImpl(LocalSearchHistoryRequestDatasource localDatasource) {
         this.localDatasource = localDatasource;
     }

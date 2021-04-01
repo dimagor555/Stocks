@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelKt;
 import androidx.paging.PagingData;
 import androidx.paging.rxjava2.PagingRx;
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -15,6 +16,9 @@ import kotlinx.coroutines.CoroutineScope;
 import ru.dimagor555.stocks.data.model.stock.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockRepository;
 
+import javax.inject.Inject;
+
+@HiltViewModel
 public class StocksBaseViewModel extends ViewModel {
     protected final StockRepository stockRepository;
 
@@ -23,6 +27,7 @@ public class StocksBaseViewModel extends ViewModel {
     protected final MutableLiveData<ErrorModel> errorsLiveData = new MutableLiveData<>();
     protected final MutableLiveData<Boolean> loadingLiveData = new MutableLiveData<>(true);
 
+    @Inject
     public StocksBaseViewModel(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
 

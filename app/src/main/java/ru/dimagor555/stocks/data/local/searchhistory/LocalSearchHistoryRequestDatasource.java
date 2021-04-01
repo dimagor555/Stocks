@@ -5,15 +5,21 @@ import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
 import ru.dimagor555.stocks.data.model.searchhistory.SearchHistoryRequest;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.LinkedList;
 import java.util.List;
 
+@Singleton
 public class LocalSearchHistoryRequestDatasource {
     private final SearchHistoryRequestModelDao dao;
-    private final SearchHistoryRequestModelMapper mapper = new SearchHistoryRequestModelMapper();
+    private final SearchHistoryRequestModelMapper mapper;
 
-    public LocalSearchHistoryRequestDatasource(SearchHistoryRequestModelDao dao) {
+    @Inject
+    public LocalSearchHistoryRequestDatasource(SearchHistoryRequestModelDao dao,
+                                               SearchHistoryRequestModelMapper mapper) {
         this.dao = dao;
+        this.mapper = mapper;
     }
 
     public Flowable<List<SearchHistoryRequest>> getAllRequestsFlowable() {

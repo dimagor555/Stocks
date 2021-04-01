@@ -3,6 +3,7 @@ package ru.dimagor555.stocks.ui.search;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PagingData;
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -13,9 +14,11 @@ import ru.dimagor555.stocks.data.model.stock.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockRepository;
 import ru.dimagor555.stocks.ui.StocksBaseViewModel;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@HiltViewModel
 public class SearchViewModel extends StocksBaseViewModel {
     private final SearchHistoryRepository searchHistoryRepository;
 
@@ -29,6 +32,7 @@ public class SearchViewModel extends StocksBaseViewModel {
     private final BehaviorSubject<String> searchRequestsSubject = BehaviorSubject.create();
     private final CompositeDisposable searchRequestsDisposable = new CompositeDisposable();
 
+    @Inject
     public SearchViewModel(StockRepository stockRepository,
                            SearchHistoryRepository searchHistoryRepository) {
         super(stockRepository);

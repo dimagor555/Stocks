@@ -10,13 +10,17 @@ import ru.dimagor555.stocks.data.remote.exception.ApiLimitReachedException;
 import ru.dimagor555.stocks.data.remote.exception.NetworkErrorException;
 import ru.dimagor555.stocks.data.remote.exception.UnknownErrorException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class RemoteStockDatasource {
     private final FinnhubApi finnhubApi;
 
+    @Inject
     public RemoteStockDatasource(FinnhubApi finnhubApi) {
         this.finnhubApi = finnhubApi;
     }

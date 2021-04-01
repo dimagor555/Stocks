@@ -5,16 +5,18 @@ import io.reactivex.Flowable;
 import ru.dimagor555.stocks.data.local.stock.LocalStockDatasource;
 import ru.dimagor555.stocks.data.remote.RemoteRequest;
 import ru.dimagor555.stocks.data.remote.RemoteRequestQueue;
-import ru.dimagor555.stocks.data.remote.RemoteStockDatasource;
+
+import javax.inject.Inject;
 
 public class StockRepositoryImpl implements StockRepository {
     private final LocalStockDatasource localRepository;
     private final RemoteRequestQueue remoteRequestQueue;
 
+    @Inject
     public StockRepositoryImpl(LocalStockDatasource localRepository,
-                               RemoteStockDatasource remoteStockDatasource) {
+                               RemoteRequestQueue remoteRequestQueue) {
         this.localRepository = localRepository;
-        remoteRequestQueue = new RemoteRequestQueue(remoteStockDatasource, localRepository);
+        this.remoteRequestQueue = remoteRequestQueue;
     }
 
     @Override

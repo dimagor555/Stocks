@@ -14,12 +14,18 @@ import ru.dimagor555.stocks.data.model.stock.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockCompanyInfo;
 import ru.dimagor555.stocks.data.model.stock.StockPrice;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class LocalStockDatasource {
     private final StockModelDao dao;
-    private final StockModelMapper mapper = new StockModelMapper();
+    private final StockModelMapper mapper;
 
-    public LocalStockDatasource(StockModelDao dao) {
+    @Inject
+    public LocalStockDatasource(StockModelDao dao, StockModelMapper mapper) {
         this.dao = dao;
+        this.mapper = mapper;
     }
 
     public Flowable<PagingData<Stock>> getAllStocks() {
@@ -92,7 +98,7 @@ public class LocalStockDatasource {
         updateStock(updatableStock);
     }
 
-    private Stock getStockByTicker(String ticker) {
+    public Stock getStockByTicker(String ticker) {
         return mapper.fromModel(dao.getStockByTicker(ticker));
     }
 }
