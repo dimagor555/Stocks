@@ -12,8 +12,10 @@ class RemoteRequestQueue @Inject constructor() {
 
     @Synchronized
     fun addRequest(request: RemoteRequest) {
-        requestQueue.add(request)
-        requestQueue.sort()
+        if (!requestQueue.contains(request)) {
+            requestQueue.add(request)
+            requestQueue.sort()
+        }
     }
 
     @Synchronized
