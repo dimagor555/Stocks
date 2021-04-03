@@ -10,7 +10,7 @@ import ru.dimagor555.stocks.data.remote.responses.StockPriceResponse;
 import ru.dimagor555.stocks.data.remote.responses.StockSearchResponse;
 
 public interface FinnhubApi {
-    @GET("./index/constituents?symbol=^GSPC")
+    @GET("./index/constituents?symbol=^DJI")
     Single<Response<StockListResponse>> getStockList();
 
     @GET("./stock/profile2")
