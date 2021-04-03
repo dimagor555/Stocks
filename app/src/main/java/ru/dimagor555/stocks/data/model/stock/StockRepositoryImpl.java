@@ -3,20 +3,20 @@ package ru.dimagor555.stocks.data.model.stock;
 import androidx.paging.PagingData;
 import io.reactivex.Flowable;
 import ru.dimagor555.stocks.data.local.stock.LocalStockDatasource;
-import ru.dimagor555.stocks.data.remote.RemoteRequest;
-import ru.dimagor555.stocks.data.remote.RemoteRequestQueue;
+import ru.dimagor555.stocks.data.remote.requests.RemoteRequest;
+import ru.dimagor555.stocks.data.remote.requests.RemoteRequestManager;
 
 import javax.inject.Inject;
 
 public class StockRepositoryImpl implements StockRepository {
     private final LocalStockDatasource localRepository;
-    private final RemoteRequestQueue remoteRequestQueue;
+    private final RemoteRequestManager remoteRequestManager;
 
     @Inject
     public StockRepositoryImpl(LocalStockDatasource localRepository,
-                               RemoteRequestQueue remoteRequestQueue) {
+                               RemoteRequestManager remoteRequestManager) {
         this.localRepository = localRepository;
-        this.remoteRequestQueue = remoteRequestQueue;
+        this.remoteRequestManager = remoteRequestManager;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class StockRepositoryImpl implements StockRepository {
     }
 
     private void loadAllStocksFromRemoteRepository() {
-        remoteRequestQueue.addRequest(new RemoteRequest.AllStocks());
+        remoteRequestManager.addRequest(new RemoteRequest.AllStocks());
     }
 
     @Override
@@ -52,10 +52,10 @@ public class StockRepositoryImpl implements StockRepository {
     @Override
     public void updateStockFromRemoteIfNeeded(Stock stock) {
         if (stock.getCompanyInfo().isEmpty()) {
-            remoteRequestQueue.addRequest(new RemoteRequest.CompanyInfo(stock.getTicker()));
+            remoteRequestManager.addRequest(new RemoteRequest.CompanyInfo(stock.getTicker()));
         }
         if (!stock.getPrice().isFresh()) {
-            remoteRequestQueue.addRequest(new RemoteRequest.Price(stock.getTicker()));
+            remoteRequestManager.addRequest(new RemoteRequest.Price(stock.getTicker()));
         }
     }
 
@@ -71,11 +71,11 @@ public class StockRepositoryImpl implements StockRepository {
 
     @Override
     public Flowable<Exception> getNetworkErrorsObservable() {
-        return remoteRequestQueue.getNetworkErrorsObservable();
+        return remoteRequestManager.getNetworkErrorsObservable();
     }
 
     @Override
     public void dispose() {
-        remoteRequestQueue.dispose();
+        remoteRequestManager.dispose();
     }
 }
