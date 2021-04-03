@@ -76,7 +76,7 @@ public class StockPrice {
     }
 
     public boolean isFresh() {
-        return isPriceTimeFresh() || isNowWeekend();
+        return (isPriceTimeFresh() || isNowWeekend()) && !isEmpty();
     }
 
     private boolean isPriceTimeFresh() {
