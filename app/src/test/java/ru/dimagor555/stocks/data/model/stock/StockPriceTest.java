@@ -1,11 +1,19 @@
 package ru.dimagor555.stocks.data.model.stock;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.time.Clock;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
-import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
+@PrepareForTest(StockPrice.class)
+@RunWith(PowerMockRunner.class)
 public class StockPriceTest {
     @Test
     public void getCurrPrice_SetPrice_ReturnCorrectPrice() {
@@ -95,47 +103,58 @@ public class StockPriceTest {
 
     @Test
     public void isFresh_NowTimeAndIsWeekend_ReturnTrue() {
-        StockPrice stockPriceMock = getMockPriceWithIsNowWeekend(
-                new StockPrice(1, 1, System.currentTimeMillis()),
-                true);
+        mockWeekend(true);
+        StockPrice stockPriceMock = new StockPrice(1, 1,
+                System.currentTimeMillis());
 
         assertTrue(stockPriceMock.isFresh());
     }
 
     @Test
     public void isFresh_NowTimeAndIsNotWeekend_ReturnTrue() {
-        StockPrice stockPriceMock = getMockPriceWithIsNowWeekend(
-                new StockPrice(1, 1, System.currentTimeMillis()),
-                false);
+        mockWeekend(false);
+        StockPrice stockPriceMock = new StockPrice(1, 1,
+                System.currentTimeMillis());
 
         assertTrue(stockPriceMock.isFresh());
     }
 
     @Test
     public void isFresh_15MinAgoTimeAndIsNotWeekend_ReturnTrue() {
-        StockPrice stockPriceMock = getMockPriceWithIsNowWeekend(
-                new StockPrice(1, 1, System.currentTimeMillis() - 15 * 60 * 1000),
-                false);
+        mockWeekend(false);
+        StockPrice stockPriceMock = new StockPrice(1, 1,
+                System.currentTimeMillis() - 15 * 60 * 1000);
 
         assertTrue(stockPriceMock.isFresh());
     }
 
     @Test
     public void isFresh_40MinAgoTimeAndIsNotWeekend_ReturnFalse() {
-        StockPrice stockPriceMock = getMockPriceWithIsNowWeekend(
-                new StockPrice(1, 1, System.currentTimeMillis() - 40 * 60 * 1000),
-                false);
+        mockWeekend(false);
+        StockPrice stockPriceMock = new StockPrice(1, 1,
+                System.currentTimeMillis() - 40 * 60 * 1000);
 
         assertFalse(stockPriceMock.isFresh());
     }
 
-    public StockPrice getMockPriceWithIsNowWeekend(StockPrice stockPrice, boolean isWeekend) {
-        StockPrice stockPriceMock = spy(stockPrice);
-        try {
-            when(stockPriceMock, "isNowWeekend").thenReturn(false);
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Test
+    public void isFresh_40MinAgoTimeAndIsWeekend_ReturnTrue() {
+        mockWeekend(true);
+        StockPrice stockPriceMock = new StockPrice(1, 1,
+                System.currentTimeMillis() - 40 * 60 * 1000);
+
+        assertTrue(stockPriceMock.isFresh());
+    }
+
+    public void mockWeekend(boolean isWeekend) {
+        LocalDate dateToMock;
+        if (isWeekend) {
+            dateToMock = LocalDate.of(2021, 4, 4);
+        } else {
+            dateToMock = LocalDate.of(2021, 4, 1);
         }
-        return stockPriceMock;
+
+        mockStatic(LocalDate.class);
+        when(LocalDate.now(Clock.systemUTC())).thenReturn(dateToMock);
     }
 }
