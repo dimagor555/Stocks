@@ -16,6 +16,7 @@ import ru.dimagor555.stocks.data.model.stock.StockPrice;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class LocalStockDatasource {
@@ -40,13 +41,9 @@ public class LocalStockDatasource {
         return dao.getFavouriteCount().map(count -> count == 0);
     }
 
-    public Flowable<PagingData<Stock>> findByTickerAndCompanyName(String request) {
+    public Flowable<PagingData<Stock>> getStocksByTickers(List<String> tickers) {
         return createFlowableStockPagingDataFromPagingSource(() ->
-                dao.findByTickerAndCompanyName("%" + request + "%"));
-    }
-
-    public boolean hasSearchResultByTickerAndCompanyName(String request) {
-        return dao.countOfStocksFoundByTickerAndCompanyName("%" + request + "%") != 0;
+                dao.getStocksByTickers(tickers));
     }
 
     private Flowable<PagingData<Stock>> createFlowableStockPagingDataFromPagingSource(
@@ -62,6 +59,10 @@ public class LocalStockDatasource {
         return Flowable
                 .just(PagingRx.map(stockModelPagingData, stockModel ->
                         Single.just(mapper.fromModel(stockModel))));
+    }
+
+    public List<String> findTickersByTickerOrCompanyName(String request) {
+        return dao.findTickersByTickerOrCompanyName("%" + request + "%");
     }
 
     public void insertStock(Stock stock) {

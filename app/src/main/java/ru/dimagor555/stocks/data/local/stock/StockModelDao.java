@@ -5,6 +5,8 @@ import androidx.room.*;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
+import java.util.List;
+
 @Dao
 public interface StockModelDao {
     @Query("select * from stocks order by ticker asc")
@@ -16,20 +18,16 @@ public interface StockModelDao {
     @Query("select count(*) from stocks where favourite = 1")
     Flowable<Integer> getFavouriteCount();
 
-    @Query("select * from stocks " +
-            "where " +
-            "ticker like :request " +
-            "or " +
-            "companyName like :request " +
-            "order by ticker, companyName asc")
-    PagingSource<Integer, StockModel> findByTickerAndCompanyName(String request);
+    @Query("select * from stocks where ticker in (:tickers)")
+    PagingSource<Integer, StockModel> getStocksByTickers(List<String> tickers);
 
-    @Query("select count(*) from stocks " +
+    @Query("select ticker from stocks " +
             "where " +
-            "ticker like :request " +
+            "ticker like :query " +
             "or " +
-            "companyName like :request ")
-    Integer countOfStocksFoundByTickerAndCompanyName(String request);
+            "companyName like :query " +
+            "order by ticker, companyName asc")
+    List<String> findTickersByTickerOrCompanyName(String query);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertStock(StockModel stock);

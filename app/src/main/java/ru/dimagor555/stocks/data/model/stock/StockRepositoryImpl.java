@@ -7,6 +7,7 @@ import ru.dimagor555.stocks.data.remote.requests.RemoteRequest;
 import ru.dimagor555.stocks.data.remote.requests.RemoteRequestManager;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class StockRepositoryImpl implements StockRepository {
     private final LocalStockDatasource localRepository;
@@ -40,13 +41,8 @@ public class StockRepositoryImpl implements StockRepository {
     }
 
     @Override
-    public Flowable<PagingData<Stock>> findByTickerAndCompanyName(String request) {
-        return localRepository.findByTickerAndCompanyName(request);
-    }
-
-    @Override
-    public boolean hasSearchResultByTickerAndCompanyName(String request) {
-        return localRepository.hasSearchResultByTickerAndCompanyName(request);
+    public Flowable<PagingData<Stock>> getStocksByTickers(List<String> tickers) {
+        return localRepository.getStocksByTickers(tickers);
     }
 
     @Override

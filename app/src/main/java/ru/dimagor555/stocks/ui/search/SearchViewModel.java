@@ -12,6 +12,7 @@ import ru.dimagor555.stocks.data.model.searchhistory.SearchHistoryRepository;
 import ru.dimagor555.stocks.data.model.searchhistory.SearchHistoryRequest;
 import ru.dimagor555.stocks.data.model.stock.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockRepository;
+import ru.dimagor555.stocks.data.model.stock.StockSearcher;
 import ru.dimagor555.stocks.ui.StocksBaseViewModel;
 
 import javax.inject.Inject;
@@ -21,10 +22,12 @@ import java.util.concurrent.TimeUnit;
 @HiltViewModel
 public class SearchViewModel extends StocksBaseViewModel {
     private final SearchHistoryRepository searchHistoryRepository;
+    private final StockSearcher stockSearcher;
 
     private final MutableLiveData<PagingData<Stock>> searchResultLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> nothingFoundLiveData = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> emptySearchLiveData = new MutableLiveData<>(true);
+
     private final MutableLiveData<List<SearchHistoryRequest>> searchHistoryLiveDate =
             new MutableLiveData<>();
     private final MutableLiveData<String> searchTextLiveData = new MutableLiveData<>(null);
@@ -34,9 +37,10 @@ public class SearchViewModel extends StocksBaseViewModel {
 
     @Inject
     public SearchViewModel(StockRepository stockRepository,
-                           SearchHistoryRepository searchHistoryRepository) {
+                           SearchHistoryRepository searchHistoryRepository, StockSearcher stockSearcher) {
         super(stockRepository);
         this.searchHistoryRepository = searchHistoryRepository;
+        this.stockSearcher = stockSearcher;
 
         loadingLiveData.setValue(false);
 
@@ -57,51 +61,70 @@ public class SearchViewModel extends StocksBaseViewModel {
         searchRequestsDisposable.clear();
         searchResultLiveData.postValue(PagingData.empty());
         if (!request.isEmpty()) {
-            emptySearchLiveData.postValue(false);
-            searchHistoryRepository.addRequest(new SearchHistoryRequest(request,
-                    System.currentTimeMillis()));
-            if (stockRepository.hasSearchResultByTickerAndCompanyName(request)) {
-                loadSearchResult(request);
-            } else {
-                showLoadingNothingFound();
-            }
+            showSearchResultScreen();
+            addSearchRequestToHistory(request);
+            startLoading(request);
         } else {
-            searchResultLiveData.postValue(PagingData.empty());
-            emptySearchLiveData.postValue(true);
-            showLoadingEndedSuccessfully();
+            showStartSearchScreen();
         }
     }
 
-    private void loadSearchResult(String request) {
+    private void startLoading(String request) {
+        showLoadingInProgress();
+        searchRequestsDisposable.add(stockSearcher
+                .findTickersByTickerOrCompanyName(request)
+                .subscribeOn(Schedulers.io())
+                .subscribe(tickers -> {
+                    if (!tickers.isEmpty()) {
+                        loadSearchResult(tickers);
+                    } else {
+                        showLoadingEndedNothingFound();
+                    }
+                }));
+    }
+
+    private void loadSearchResult(List<String> tickers) {
         Flowable<PagingData<Stock>> searchResult =
-                cacheInPagingRx(stockRepository.findByTickerAndCompanyName(request));
+                cacheInPagingRx(stockRepository.getStocksByTickers(tickers));
 
         redirectFlowableToLiveData(
                 searchResult,
                 searchResultLiveData,
                 searchRequestsDisposable);
-
-        showLoading();
     }
 
-    private void showLoading() {
+    private void addSearchRequestToHistory(String request) {
+        searchHistoryRepository.addRequest(new SearchHistoryRequest(request,
+                System.currentTimeMillis()));
+    }
+
+    private void showLoadingInProgress() {
         loadingLiveData.postValue(true);
         nothingFoundLiveData.postValue(false);
     }
 
-    private void showLoadingEndedSuccessfully() {
+    private void showLoadingEndedWithResult() {
         loadingLiveData.postValue(false);
         nothingFoundLiveData.postValue(false);
     }
 
-    private void showLoadingNothingFound() {
+    private void showLoadingEndedNothingFound() {
         loadingLiveData.postValue(false);
         nothingFoundLiveData.postValue(true);
     }
 
+    private void showStartSearchScreen() {
+        emptySearchLiveData.postValue(true);
+        showLoadingEndedWithResult();
+    }
+
+    private void showSearchResultScreen() {
+        emptySearchLiveData.postValue(false);
+    }
+
     @Override
     protected void onLoadingSuccessfullyEnded() {
-        showLoadingEndedSuccessfully();
+        showLoadingEndedWithResult();
     }
 
     public void onSelectSearchRequestFromHistory(SearchHistoryRequest request) {

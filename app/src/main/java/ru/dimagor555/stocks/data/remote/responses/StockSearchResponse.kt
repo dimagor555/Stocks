@@ -6,7 +6,10 @@ class StockSearchResponse(
     @SerializedName("result")
     private val tickersSearchResult: List<SearchResultStock>,
 ) {
-    val tickers = tickersSearchResult.map { toString() }
+    val tickers
+        get() = tickersSearchResult
+            .map { it.toString() }
+            .filter { it.contains(Regex("^[A-Z]{1,4}\$")) }
 
     class SearchResultStock(@SerializedName("symbol") val ticker: String) {
         override fun toString(): String {

@@ -3,6 +3,8 @@ package ru.dimagor555.stocks.data.model.stock;
 import androidx.paging.PagingData;
 import io.reactivex.Flowable;
 
+import java.util.List;
+
 public interface StockRepository {
     Flowable<PagingData<Stock>> getAllStocks();
 
@@ -10,9 +12,7 @@ public interface StockRepository {
 
     Flowable<Boolean> isFavouriteListEmpty();
 
-    Flowable<PagingData<Stock>> findByTickerAndCompanyName(String request);
-
-    boolean hasSearchResultByTickerAndCompanyName(String request);
+    Flowable<PagingData<Stock>> getStocksByTickers(List<String> tickers);
 
     void updateStockFromRemoteIfNeeded(Stock stock);
 

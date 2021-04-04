@@ -112,7 +112,7 @@ class RemoteRequestExecutor @Inject constructor(
         val query = request.query
         disposeBag.add(
             buildDefaultRequest(
-                remoteStockDatasource.findStockByTickerAndCompanyName(query),
+                remoteStockDatasource.findTickersByTickerOrCompanyName(query),
                 request
             ).subscribe(
                 {
@@ -164,7 +164,7 @@ class RemoteRequestExecutor @Inject constructor(
     }
 
     @Synchronized
-    private fun canExecuteRequest(): Boolean = apiLimitRemaining > 0
+    private fun canExecuteRequest() = apiLimitRemaining > 0
 
     fun resetApiLimitRemaining() {
         apiLimitRemaining = 60

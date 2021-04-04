@@ -92,7 +92,7 @@ public class RemoteStockDatasource {
         return handleResponseErrors(response, stockPrice);
     }
 
-    public Single<BaseResponse<List<String>>> findStockByTickerAndCompanyName(String query) {
+    public Single<BaseResponse<List<String>>> findTickersByTickerOrCompanyName(String query) {
         return finnhubApi.findStockByTickerAndCompanyName(query)
                 .subscribeOn(Schedulers.io())
                 .flatMap(this::mapFindResponse)
