@@ -22,7 +22,8 @@ object DatabaseModule {
             appContext,
             StocksDatabase::class.java,
             StocksDatabase.DB_NAME
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

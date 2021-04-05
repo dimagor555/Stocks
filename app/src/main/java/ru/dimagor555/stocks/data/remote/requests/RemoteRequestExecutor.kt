@@ -59,8 +59,8 @@ class RemoteRequestExecutor @Inject constructor(
         )
     }
 
-    private fun handleAllStocksResult(response: BaseResponse<List<Stock>>) {
-        response.data.forEach { localStockDatasource.insertStock(it) }
+    private fun handleAllStocksResult(response: BaseResponse<List<Stock?>?>) {
+        response.data?.forEach { localStockDatasource.insertStock(it!!) }
     }
 
     private fun executeCompanyInfoRequest(request: RemoteRequest.CompanyInfo) {

@@ -35,7 +35,7 @@ public class StockItemAdapter extends PagingDataAdapter<Stock, StockItemViewHold
             holder.bindOn(currItem);
             holder.setOnFavouriteClicked(v -> {
                 currItem.toggleFavourite();
-                viewModel.updateStockFavourite(currItem);
+                viewModel.updateStockFavourite(currItem.getTicker(), currItem.isFavourite());
                 currItem.toggleFavourite();
             });
             viewModel.notifyStockShownToUser(currItem);

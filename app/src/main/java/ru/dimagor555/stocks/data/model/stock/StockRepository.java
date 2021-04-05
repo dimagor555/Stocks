@@ -18,7 +18,7 @@ public interface StockRepository {
 
     void insertStock(Stock stock);
 
-    void updateStock(Stock stock);
+    void updateStockFavourite(String ticker, boolean favourite);
 
     Flowable<Exception> getNetworkErrorsObservable();
 

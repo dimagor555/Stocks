@@ -61,8 +61,8 @@ public class StocksBaseViewModel extends ViewModel {
         return PagingRx.cachedIn(pagingDataToCache, coroutineScope);
     }
 
-    public void updateStockFavourite(Stock stock) {
-        stockRepository.updateStock(stock);
+    public void updateStockFavourite(String ticker, boolean favourite) {
+        stockRepository.updateStockFavourite(ticker, favourite);
     }
 
     public void notifyStockShownToUser(Stock stock) {

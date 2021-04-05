@@ -61,8 +61,8 @@ public class StockRepositoryImpl implements StockRepository {
     }
 
     @Override
-    public void updateStock(Stock stock) {
-        localRepository.updateStock(stock);
+    public void updateStockFavourite(String ticker, boolean favourite) {
+        localRepository.updateStockFavourite(ticker, favourite);
     }
 
     @Override
