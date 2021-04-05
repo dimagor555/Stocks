@@ -21,6 +21,4 @@ public interface StockRepository {
     void updateStockFavourite(String ticker, boolean favourite);
 
     Flowable<Exception> getNetworkErrorsObservable();
-
-    void dispose();
 }

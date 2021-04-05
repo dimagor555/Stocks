@@ -69,9 +69,4 @@ public class StockRepositoryImpl implements StockRepository {
     public Flowable<Exception> getNetworkErrorsObservable() {
         return remoteRequestManager.getNetworkErrorsObservable();
     }
-
-    @Override
-    public void dispose() {
-        remoteRequestManager.dispose();
-    }
 }

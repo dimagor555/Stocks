@@ -169,8 +169,4 @@ class RemoteRequestExecutor @Inject constructor(
     fun resetApiLimitRemaining() {
         apiLimitRemaining = 60
     }
-
-    fun dispose() {
-        disposeBag.dispose()
-    }
 }

@@ -88,6 +88,5 @@ public class StocksBaseViewModel extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         disposeBag.dispose();
-        stockRepository.dispose();
     }
 }

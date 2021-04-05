@@ -41,8 +41,4 @@ class RemoteRequestNetworkErrorHandler @Inject constructor() {
         }
         onNetworkErrorCallback.run()
     }
-
-    fun dispose() {
-        disposeBag.dispose()
-    }
 }
