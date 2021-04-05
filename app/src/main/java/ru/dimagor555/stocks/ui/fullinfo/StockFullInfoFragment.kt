@@ -128,7 +128,9 @@ class StockFullInfoFragment : Fragment() {
         clear()
         tvTicker.text = stock.ticker
         tvCompanyName.text = stock.companyInfo.companyName
-        tvCurrPrice.text = "$${stock.price.currPrice}"
+        stock.price.currPrice?.let {
+            tvCurrPrice.text = "$${it}"
+        }
         with(stock.price) {
             setDeltaPrice(deltaPrice, deltaPricePercent, isDeltaPricePositive)
         }

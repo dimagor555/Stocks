@@ -1,5 +1,6 @@
 package ru.dimagor555.stocks.ui.allstocks;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,12 +54,15 @@ public class AllStocksFragment extends Fragment {
 
         viewModel.getErrors().observe(getViewLifecycleOwner(), errorModel -> {
             if (errorModel != null && alertDialog == null || !alertDialog.isShowing()) {
-                alertDialog = new AlertDialog.Builder(getContext())
-                        .setTitle(errorModel.getTitle(getContext()))
-                        .setMessage(errorModel.getMessage(getContext()))
-                        .setNegativeButton(R.string.ok, null)
-                        .show();
-                viewModel.getErrors().setValue(null);
+                Context context = getContext();
+                if (context != null && errorModel != null) {
+                    alertDialog = new AlertDialog.Builder(context)
+                            .setTitle(errorModel.getTitle(context))
+                            .setMessage(errorModel.getMessage(context))
+                            .setNegativeButton(R.string.ok, null)
+                            .show();
+                    viewModel.getErrors().setValue(null);
+                }
             }
         });
     }
