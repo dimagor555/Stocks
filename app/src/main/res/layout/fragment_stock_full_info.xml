@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:orientation="vertical"
+                                                     tools:context=".ui.fullinfo.StockFullInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/full_info_frag_header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:elevation="4dp">
+
+            <FrameLayout
+                    android:id="@+id/full_info_frag_btn_back_layout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/outline_arrow_back_24"
+                        app:tint="@android:color/black"
+                        android:layout_gravity="center"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/full_info_frag_btn_back_layout"
+                    app:layout_constraintEnd_toStartOf="@id/full_info_frag_btn_favourite_layout">
+
+                <TextView
+                        android:id="@+id/full_info_frag_text_ticker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="AAPL"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textFontWeight="700"/>
+
+                <TextView
+                        android:id="@+id/full_info_frag_text_company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Apple Inc."
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textFontWeight="600"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                    android:id="@+id/full_info_frag_btn_favourite_layout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                        android:id="@+id/full_info_frag_image_favourite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/outline_star_outline_24"
+                        android:layout_gravity="center"/>
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+                android:id="@+id/full_info_frag_price_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/full_info_frag_header_layout">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="5dp">
+
+                <TextView
+                        android:id="@+id/full_info_frag_text_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="$131.93"
+                        android:textAlignment="center"
+                        android:textSize="28sp"
+                        android:textFontWeight="700"/>
+
+                <TextView
+                        android:id="@+id/full_info_frag_text_price_delta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="+$0.12(1,15%)"
+                        android:textColor="@color/colorGreen"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textFontWeight="600"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/full_info_frag_chart_prices"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/full_info_frag_price_layout"
+                app:layout_constraintBottom_toTopOf="@id/full_info_frag_footer_layout">
+
+        </com.github.mikephil.charting.charts.LineChart>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/full_info_frag_footer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/full_info_frag_interval_chooser_toggle_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="horizontal"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/full_info_frag_btn_Year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/year"
+                        style="?attr/materialButtonOutlinedStyle"/>
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/full_info_frag_btn_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/month"
+                        style="?attr/materialButtonOutlinedStyle"/>
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/full_info_frag_btn_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/week"
+                        style="?attr/materialButtonOutlinedStyle"/>
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/full_info_frag_btn_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/day"
+                        style="?attr/materialButtonOutlinedStyle"/>
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/full_info_frag_btn_buy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/full_info_frag_interval_chooser_toggle_group"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    app:cornerRadius="15dp"
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
+                    android:text="@string/buy_for"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/full_info_frag_progress_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

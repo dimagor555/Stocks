@@ -15,4 +15,9 @@
     <string name="you_ve_searched_for_this">Вы уже искали это</string>
     <string name="favourite_add_instruction">Нажмите на звёздочку, чтобы добавить акцию в избранные</string>
     <string name="search_frag_hold_to_delete">Удерживайте на элементе для удаления его из истории</string>
+    <string name="year">Год</string>
+    <string name="month">Месяц</string>
+    <string name="week">Неделя</string>
+    <string name="day">День</string>
+    <string name="buy_for">Купить за</string>
 </resources>

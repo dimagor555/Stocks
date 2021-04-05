@@ -34,6 +34,13 @@ class LocalStockDatasource @Inject constructor(
         return createFlowableStockPagingDataFromPagingSource { dao.getStocksByTickers(tickers) }
     }
 
+    fun getStockByTicker(ticker: String): Flowable<Stock?> {
+        val stockModelFlowable = dao.getStockFlowableByTicker(ticker = ticker)
+        return stockModelFlowable.map {
+            return@map mapper.fromStockModel(it)
+        }
+    }
+
     private fun createFlowableStockPagingDataFromPagingSource(
         pagingSource: Function0<PagingSource<Int, StockModel>>
     ): Flowable<PagingData<Stock>> {

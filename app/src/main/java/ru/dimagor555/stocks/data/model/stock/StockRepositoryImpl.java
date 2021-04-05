@@ -46,6 +46,11 @@ public class StockRepositoryImpl implements StockRepository {
     }
 
     @Override
+    public Flowable<Stock> getStockByTicker(String ticker) {
+        return localRepository.getStockByTicker(ticker);
+    }
+
+    @Override
     public void updateStockFromRemoteIfNeeded(Stock stock) {
         if (stock.getCompanyInfo().isEmpty()) {
             remoteRequestManager.addRequest(new RemoteRequest.CompanyInfo(stock.getTicker()));
@@ -53,11 +58,6 @@ public class StockRepositoryImpl implements StockRepository {
         if (!stock.getPrice().isFresh()) {
             remoteRequestManager.addRequest(new RemoteRequest.Price(stock.getTicker()));
         }
-    }
-
-    @Override
-    public void insertStock(Stock stock) {
-         localRepository.insertStock(stock);
     }
 
     @Override

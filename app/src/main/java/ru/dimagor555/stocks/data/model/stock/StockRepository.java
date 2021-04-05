@@ -14,9 +14,9 @@ public interface StockRepository {
 
     Flowable<PagingData<Stock>> getStocksByTickers(List<String> tickers);
 
-    void updateStockFromRemoteIfNeeded(Stock stock);
+    Flowable<Stock> getStockByTicker(String ticker);
 
-    void insertStock(Stock stock);
+    void updateStockFromRemoteIfNeeded(Stock stock);
 
     void updateStockFavourite(String ticker, boolean favourite);
 

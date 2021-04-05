@@ -47,6 +47,10 @@ interface StockModelDao {
     @Query("select * from stocks where ticker = :ticker")
     fun getStockByTicker(ticker: String): StockModel?
 
+    @Transaction
+    @Query("select * from stocks where ticker = :ticker")
+    fun getStockFlowableByTicker(ticker: String): Flowable<StockModel?>
+
     @Query("select exists(select ticker from stocks where ticker = :ticker)")
     fun hasStockWithTicker(ticker: String): Boolean
 }

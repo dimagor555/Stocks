@@ -14,4 +14,9 @@
     <string name="you_ve_searched_for_this">You\'ve searched for this</string>
     <string name="favourite_add_instruction">Click on a star to add stock in favourite</string>
     <string name="search_frag_hold_to_delete">Hold on element to delete it from history</string>
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="week">Week</string>
+    <string name="day">Day</string>
+    <string name="buy_for">Buy for</string>
 </resources>
