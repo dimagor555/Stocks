@@ -105,7 +105,7 @@ class RemoteRequestExecutor @Inject constructor(
 
     //returns list of found tickers
     fun executeSearchRequest(request: RemoteRequest.Search): Single<List<String>> {
-        if (!canExecuteRequest()) throw ApiLimitReachedException()
+        if (!canExecuteRequest()) return Single.error(ApiLimitReachedException())
 
         request.isInProgress = true
         val response = SingleSubject.create<List<String>>()
