@@ -43,7 +43,6 @@ class RemoteRequestManager @Inject constructor(
     }
 
     fun addRequest(request: RemoteRequest) {
-        Log.d(TAG, "addRequest: request = $request")
         if (request is RemoteRequest.Search) {
             throw IllegalArgumentException(
                 "Search request must " +
@@ -51,19 +50,14 @@ class RemoteRequestManager @Inject constructor(
             )
         }
         requestQueue.addRequest(request)
-        Log.d(TAG, "request added, requests in progress = ${requestQueue.countOfRequestInProcess}")
-        Log.d(TAG, "requestQueue.requestToExecute = ${requestQueue.getRequestToExecute()}")
         notifyMayBePendingRequests()
     }
 
     @Synchronized
     private fun notifyMayBePendingRequests() {
-        Log.d(TAG, "notifyMayBePendingRequests() called")
         if (canMakeRequests()) {
             val request = requestQueue.getRequestToExecute()
             request?.let {
-                Log.d(TAG, "requestExecuted: request = $request " +
-                        "apiLimit = ${requestExecutor.apiLimitRemaining}")
                 requestExecutor.executeRequest(it)
             }
         }
@@ -71,9 +65,6 @@ class RemoteRequestManager @Inject constructor(
 
     @Synchronized
     private fun canMakeRequests(): Boolean {
-        Log.d(TAG, "canMakeRequests():" +
-                "!requestsBlock = ${!requestsBlock} " +
-                "requestQueue.countOfRequestInProcess <= MAX_CONCURRENT_REQUESTS = ${requestQueue.countOfRequestInProcess <= MAX_CONCURRENT_REQUESTS}")
         return !requestsBlock &&
                 requestQueue.countOfRequestInProcess <= MAX_CONCURRENT_REQUESTS
     }
@@ -84,11 +75,7 @@ class RemoteRequestManager @Inject constructor(
 
     @Synchronized
     private fun onRequestFinished() {
-        Log.d(TAG, "onRequestFinished")
         if (requestExecutor.apiLimitRemaining == 0) {
-            Log.d(TAG, "apiLimitRemaining = ${requestExecutor.apiLimitRemaining}, " +
-                    "apiLimitResetTime = ${requestExecutor.apiLimitResetTime}, " +
-                    "currTime = ${System.currentTimeMillis() / 1000}")
             val resetTime = requestExecutor.apiLimitResetTime
             val remainingTime = computeMillisecondsToApiReset(resetTime)
             suspendRequestForMilliseconds(remainingTime)
@@ -106,7 +93,7 @@ class RemoteRequestManager @Inject constructor(
     private var suspendDisposable: Disposable? = null
 
     private fun suspendRequestForMilliseconds(time: Long) {
-        Log.e(TAG, "suspendRequests for $time ms")
+        Log.i(TAG, "suspendRequests for $time ms")
         requestsBlock = true
         suspendDisposable?.dispose()
         suspendDisposable = Completable.complete()
@@ -116,7 +103,7 @@ class RemoteRequestManager @Inject constructor(
     }
 
     private fun continueRequests() {
-        Log.e(TAG, "requests continued")
+        Log.i(TAG, "requests continued")
         requestsBlock = false
         requestExecutor.resetApiLimitRemaining()
         notifyMayBePendingRequests()
