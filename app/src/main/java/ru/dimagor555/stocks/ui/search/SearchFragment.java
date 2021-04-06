@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,8 +28,6 @@ import ru.dimagor555.stocks.ui.stockitem.StockItemAdapter;
 
 @AndroidEntryPoint
 public class SearchFragment extends Fragment {
-    private AlertDialog alertDialog;
-
     private TextInputLayout etLayoutSearch;
     private TextInputEditText etSearch;
     private RecyclerView recyclerViewStocks;
@@ -129,12 +127,11 @@ public class SearchFragment extends Fragment {
         });
 
         viewModel.getErrors().observe(getViewLifecycleOwner(), errorModel -> {
-            if (errorModel != null && alertDialog == null || !alertDialog.isShowing()) {
-                alertDialog = new AlertDialog.Builder(getContext())
-                        .setTitle(errorModel.getTitle(getContext()))
-                        .setMessage(errorModel.getMessage(getContext()))
-                        .setNegativeButton(R.string.ok, null)
-                        .show();
+            Context context = getContext();
+            if (errorModel != null && context != null) {
+                Toast.makeText(context,
+                        errorModel.getTitle(context) + ": " + errorModel.getMessage(context),
+                        Toast.LENGTH_LONG).show();
                 viewModel.getErrors().setValue(null);
             }
         });

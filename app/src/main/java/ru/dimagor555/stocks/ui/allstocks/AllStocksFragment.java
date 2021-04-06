@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +19,6 @@ import ru.dimagor555.stocks.ui.stocks.StocksViewModel;
 
 @AndroidEntryPoint
 public class AllStocksFragment extends Fragment {
-    private AlertDialog alertDialog;
     private RecyclerView recyclerViewStocks;
 
     private StocksViewModel viewModel;
@@ -53,16 +52,12 @@ public class AllStocksFragment extends Fragment {
                 adapter.submitData(getLifecycle(), stockPagingData));
 
         viewModel.getErrors().observe(getViewLifecycleOwner(), errorModel -> {
-            if (errorModel != null && alertDialog == null || !alertDialog.isShowing()) {
-                Context context = getContext();
-                if (context != null && errorModel != null) {
-                    alertDialog = new AlertDialog.Builder(context)
-                            .setTitle(errorModel.getTitle(context))
-                            .setMessage(errorModel.getMessage(context))
-                            .setNegativeButton(R.string.ok, null)
-                            .show();
-                    viewModel.getErrors().setValue(null);
-                }
+            Context context = getContext();
+            if (errorModel != null && context != null) {
+                Toast.makeText(context,
+                        errorModel.getTitle(context) + ": " + errorModel.getMessage(context),
+                        Toast.LENGTH_LONG).show();
+                viewModel.getErrors().setValue(null);
             }
         });
     }

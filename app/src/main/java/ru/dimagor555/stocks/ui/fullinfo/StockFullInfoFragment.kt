@@ -119,7 +119,7 @@ class StockFullInfoFragment : Fragment() {
                     context,
                     "${it.getTitle(context)}: ${it.getMessage(context)}",
                     Toast.LENGTH_SHORT
-                )
+                ).show()
             }
         })
     }
