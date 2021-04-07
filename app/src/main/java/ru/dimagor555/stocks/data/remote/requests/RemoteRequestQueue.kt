@@ -1,11 +1,12 @@
 package ru.dimagor555.stocks.data.remote.requests
 
+import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RemoteRequestQueue @Inject constructor() {
-    private val requestQueue = ArrayList<RemoteRequest>(100)
+    private val requestQueue = CopyOnWriteArrayList<RemoteRequest>()
 
     val countOfRequestInProcess
         get() = requestQueue.count { it.isInProgress }
