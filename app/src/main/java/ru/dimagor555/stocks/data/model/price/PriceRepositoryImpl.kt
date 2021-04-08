@@ -14,7 +14,7 @@ class PriceRepositoryImpl @Inject constructor(
         ticker: String, interval: Interval,
         useRemoteDatasource: Boolean
     ): Flowable<List<Price>> {
-        val from = interval.getFromTime()
+        val from = interval.fromTime
         if (useRemoteDatasource)
             remoteRequestManager.addRequest(RemoteRequest.Prices(ticker, from))
         return localDatasource.getPricesByTickerFromTime(ticker, from)

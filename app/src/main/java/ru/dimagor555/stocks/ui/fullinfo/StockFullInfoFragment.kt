@@ -123,10 +123,13 @@ class StockFullInfoFragment : Fragment() {
         })
 
         viewModel.chartDataSet.observe(viewLifecycleOwner, {
-            it?.let {
+            if (it != null) {
                 chartPrices.data = LineData(it)
                 chartPrices.notifyDataSetChanged()
                 chartPrices.invalidate()
+                viewModel.notifyPricesShownToUser()
+            } else {
+                chartPrices.clear()
             }
         })
 

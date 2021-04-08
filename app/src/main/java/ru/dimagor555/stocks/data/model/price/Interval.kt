@@ -7,13 +7,22 @@ import java.time.ZoneOffset
 enum class Interval {
     WEEK, MONTH, YEAR;
 
-    fun getFromTime(): Long {
-        val currDate = LocalDate.now(Clock.systemUTC())
-        val fromDate = when (this) {
-            WEEK -> currDate.minusWeeks(1)
-            MONTH -> currDate.minusMonths(1)
-            YEAR -> currDate.minusYears(1)
+    val fromTime: Long
+        get() {
+            val currDate = LocalDate.now(Clock.systemUTC())
+            val fromDate = when (this) {
+                WEEK -> currDate.minusWeeks(1)
+                MONTH -> currDate.minusMonths(1)
+                YEAR -> currDate.minusYears(1)
+            }
+            return fromDate.atStartOfDay().toEpochSecond(ZoneOffset.UTC)
         }
-        return fromDate.atStartOfDay().toEpochSecond(ZoneOffset.UTC)
-    }
+
+    val minPricesSize: Int
+        get() =
+            when (this) {
+                WEEK -> 1
+                MONTH -> 8
+                YEAR -> 32
+            }
 }
