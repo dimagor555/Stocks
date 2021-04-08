@@ -10,7 +10,7 @@ import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import org.jetbrains.annotations.NotNull;
 import ru.dimagor555.stocks.R;
-import ru.dimagor555.stocks.data.model.stock.Stock;
+import ru.dimagor555.stocks.data.model.stock.entity.Stock;
 import ru.dimagor555.stocks.ui.StocksBaseViewModel;
 import ru.dimagor555.stocks.ui.search.SearchFragmentDirections;
 import ru.dimagor555.stocks.ui.search.SearchViewModel;

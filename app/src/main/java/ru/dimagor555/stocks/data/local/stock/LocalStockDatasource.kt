@@ -1,41 +1,47 @@
 package ru.dimagor555.stocks.data.local.stock
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.rxjava2.flowable
 import androidx.paging.rxjava2.mapAsync
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.Action
-import io.reactivex.schedulers.Schedulers
-import ru.dimagor555.stocks.data.model.stock.Stock
-import ru.dimagor555.stocks.data.model.stock.StockCompanyInfo
-import ru.dimagor555.stocks.data.model.stock.StockPrice
+import ru.dimagor555.stocks.data.local.DbUtils
+import ru.dimagor555.stocks.data.local.StocksDatabase
+import ru.dimagor555.stocks.data.local.stock.dao.StockBaseModelDao
+import ru.dimagor555.stocks.data.local.stock.dao.StockModelDao
+import ru.dimagor555.stocks.data.local.stock.dao.StockPriceModelDao
+import ru.dimagor555.stocks.data.local.stock.entity.StockModel
+import ru.dimagor555.stocks.data.local.stock.mapper.StockModelMapper
+import ru.dimagor555.stocks.data.model.stock.entity.Stock
+import ru.dimagor555.stocks.data.model.stock.entity.StockCompanyInfo
+import ru.dimagor555.stocks.data.model.stock.entity.StockPrice
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocalStockDatasource @Inject constructor(
-    private val dao: StockModelDao,
+    private val database: StocksDatabase,
+    private val stockDao: StockModelDao,
+    private val stockBaseDao: StockBaseModelDao,
+    private val stockPriceDao: StockPriceModelDao,
     private val mapper: StockModelMapper
 ) {
     val allStocks: Flowable<PagingData<Stock>>
-        get() = createFlowableStockPagingDataFromPagingSource { dao.allStocks }
+        get() = createFlowableStockPagingDataFromPagingSource { stockDao.allStocks }
     val favouriteStocks: Flowable<PagingData<Stock>>
-        get() = createFlowableStockPagingDataFromPagingSource { dao.favouriteStocks }
+        get() = createFlowableStockPagingDataFromPagingSource { stockDao.favouriteStocks }
     val isFavouriteListEmpty: Flowable<Boolean>
-        get() = dao.favouriteCount.map { count: Int -> count == 0 }
+        get() = stockDao.favouriteCount.map { count: Int -> count == 0 }
 
     fun getStocksByTickers(tickers: List<String>): Flowable<PagingData<Stock>> {
-        return createFlowableStockPagingDataFromPagingSource { dao.getStocksByTickers(tickers) }
+        return createFlowableStockPagingDataFromPagingSource { stockDao.getStocksByTickers(tickers) }
     }
 
     fun getStockByTicker(ticker: String): Flowable<Stock?> {
-        val stockModelFlowable = dao.getStockFlowableByTicker(ticker = ticker)
+        val stockModelFlowable = stockDao.getStockFlowableByTicker(ticker = ticker)
         return stockModelFlowable.map {
             return@map mapper.fromStockModel(it)
         }
@@ -62,70 +68,63 @@ class LocalStockDatasource @Inject constructor(
     }
 
     fun findTickersByTickerOrCompanyName(request: String): List<String> {
-        return dao.findTickersByTickerOrCompanyName("%$request%")
+        return stockDao.findTickersByTickerOrCompanyName("%$request%")
     }
 
     fun insertStock(stock: Stock) {
-        runDbQuery {
-            if (dao.hasStockWithTicker(stock.ticker))
+        DbUtils.runDbQuery {
+            if (stockBaseDao.hasStockWithTicker(stock.ticker))
                 return@runDbQuery
 
-            val priceModelToInsert = mapper.toStockPriceModel(stock)
-            val priceId = dao.insertStockPriceModel(priceModelToInsert).toInt()
-            val stockBaseModel = mapper.toStockBaseModel(stock, priceId)
-            dao.insertStockBaseModel(stockBaseModel)
+            database.runInTransaction {
+                val priceModelToInsert = mapper.toStockPriceModel(stock)
+                val priceId = stockPriceDao
+                    .insertStockPriceModel(priceModelToInsert).toInt()
+                val stockBaseModel = mapper.toStockBaseModel(stock, priceId)
+                stockBaseDao.insertStockBaseModel(stockBaseModel)
+            }
         }
     }
 
     fun updateStockFavourite(ticker: String, favourite: Boolean) {
-        runDbQuery {
-            dao.getStockByTicker(ticker)?.let {
-                val baseModelToUpdate = it.stockBaseModel.copy(favourite = favourite)
-                dao.updateStockBaseModel(baseModelToUpdate)
+        DbUtils.runDbQuery {
+            stockBaseDao.getStockByTicker(ticker)?.let {
+                val baseModelToUpdate = it.copy(favourite = favourite)
+                stockBaseDao.updateStockBaseModel(baseModelToUpdate)
             }
         }
     }
 
     fun updateStockCompanyInfo(ticker: String, newCompanyInfo: StockCompanyInfo) {
-        runDbQuery {
-            dao.getStockByTicker(ticker)?.let {
+        DbUtils.runDbQuery {
+            stockBaseDao.getStockByTicker(ticker)?.let {
                 val baseModelToUpdate =
                     with(newCompanyInfo) {
-                        it.stockBaseModel.copy(
+                        it.copy(
                             companyName = companyName,
                             companySiteUrl = companySiteUrl,
                             logoUrl = logoUrl
                         )
                     }
-                dao.updateStockBaseModel(baseModelToUpdate)
+                stockBaseDao.updateStockBaseModel(baseModelToUpdate)
             }
         }
     }
 
     fun updateStockPriceInfo(ticker: String, newPrice: StockPrice) {
-        runDbQuery {
-            dao.getStockByTicker(ticker)?.let {
+        DbUtils.runDbQuery {
+            stockBaseDao.getStockByTicker(ticker)?.let {
+                val oldPrice = stockPriceDao.getStockPriceById(it.priceId)
                 val priceModelToUpdate =
                     with(newPrice) {
-                        it.stockPriceModel.copy(
+                        oldPrice.copy(
                             currPriceInCents = currPriceInCents,
                             previousClosePriceInCents = previousClosePriceInCents,
                             priceTime = priceTime
                         )
                     }
-                dao.updateStockPriceModel(priceModelToUpdate)
+                stockPriceDao.updateStockPriceModel(priceModelToUpdate)
             }
         }
-    }
-
-    private fun runDbQuery(action: Action) {
-        Completable.fromAction(action)
-            .subscribeOn(Schedulers.io())
-            .doOnError { logDbError(it) }
-            .subscribe()
-    }
-
-    private fun logDbError(error: Throwable) {
-        Log.e("DB", error.message, error)
     }
 }

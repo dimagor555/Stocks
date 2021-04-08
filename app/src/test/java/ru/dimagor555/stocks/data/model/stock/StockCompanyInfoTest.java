@@ -1,6 +1,7 @@
 package ru.dimagor555.stocks.data.model.stock;
 
 import org.junit.Test;
+import ru.dimagor555.stocks.data.model.stock.entity.StockCompanyInfo;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

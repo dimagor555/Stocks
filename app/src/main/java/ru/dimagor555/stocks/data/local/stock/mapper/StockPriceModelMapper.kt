@@ -1,6 +1,7 @@
-package ru.dimagor555.stocks.data.local.stock
+package ru.dimagor555.stocks.data.local.stock.mapper
 
-import ru.dimagor555.stocks.data.model.stock.StockPrice
+import ru.dimagor555.stocks.data.local.stock.entity.StockPriceModel
+import ru.dimagor555.stocks.data.model.stock.entity.StockPrice
 import javax.inject.Inject
 
 class StockPriceModelMapper @Inject constructor() {

@@ -1,4 +1,4 @@
-package ru.dimagor555.stocks.data.model.stock
+package ru.dimagor555.stocks.data.model.stock.entity
 
 data class Stock(
     val ticker: String,

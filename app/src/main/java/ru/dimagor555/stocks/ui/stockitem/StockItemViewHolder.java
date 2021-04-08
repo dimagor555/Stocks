@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import ru.dimagor555.stocks.R;
-import ru.dimagor555.stocks.data.model.stock.Stock;
-import ru.dimagor555.stocks.data.model.stock.StockCompanyInfo;
-import ru.dimagor555.stocks.data.model.stock.StockPrice;
+import ru.dimagor555.stocks.data.model.stock.entity.Stock;
+import ru.dimagor555.stocks.data.model.stock.entity.StockCompanyInfo;
+import ru.dimagor555.stocks.data.model.stock.entity.StockPrice;
 
 public class StockItemViewHolder extends RecyclerView.ViewHolder {
     private final ShapeableImageView ivStockIcon;

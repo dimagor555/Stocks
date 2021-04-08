@@ -6,10 +6,13 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
+import ru.dimagor555.stocks.data.local.price.LocalPriceDatasource
 import ru.dimagor555.stocks.data.local.stock.LocalStockDatasource
-import ru.dimagor555.stocks.data.model.stock.Stock
-import ru.dimagor555.stocks.data.model.stock.StockCompanyInfo
-import ru.dimagor555.stocks.data.model.stock.StockPrice
+import ru.dimagor555.stocks.data.model.price.Price
+import ru.dimagor555.stocks.data.model.stock.entity.Stock
+import ru.dimagor555.stocks.data.model.stock.entity.StockCompanyInfo
+import ru.dimagor555.stocks.data.model.stock.entity.StockPrice
+import ru.dimagor555.stocks.data.remote.RemotePriceDatasource
 import ru.dimagor555.stocks.data.remote.RemoteStockDatasource
 import ru.dimagor555.stocks.data.remote.exception.ApiLimitReachedException
 import ru.dimagor555.stocks.data.remote.responses.BaseResponse
@@ -19,7 +22,9 @@ import javax.inject.Singleton
 @Singleton
 class RemoteRequestExecutor @Inject constructor(
     private val remoteStockDatasource: RemoteStockDatasource,
-    private val localStockDatasource: LocalStockDatasource
+    private val remotePriceDatasource: RemotePriceDatasource,
+    private val localStockDatasource: LocalStockDatasource,
+    private val localPriceDatasource: LocalPriceDatasource,
 ) {
     var apiLimitRemaining = 60
         private set
@@ -45,6 +50,7 @@ class RemoteRequestExecutor @Inject constructor(
                 )
             is RemoteRequest.CompanyInfo -> executeCompanyInfoRequest(request)
             is RemoteRequest.Price -> executePriceRequest(request)
+            is RemoteRequest.Prices -> executePricesRequest(request)
         }
     }
 
@@ -101,6 +107,27 @@ class RemoteRequestExecutor @Inject constructor(
         response: BaseResponse<StockPrice>
     ) {
         localStockDatasource.updateStockPriceInfo(ticker, response.data)
+    }
+
+    private fun executePricesRequest(request: RemoteRequest.Prices) {
+        val ticker = request.ticker
+        val from = request.from
+        disposeBag.add(
+            buildDefaultRequest(
+                remotePriceDatasource.getPrices(ticker, from),
+                request
+            ).subscribe(
+                { handlePricesResult(ticker, it) },
+                this::handleRemoteError
+            )
+        )
+    }
+
+    private fun handlePricesResult(
+        ticker: String,
+        response: BaseResponse<List<Price>>
+    ) {
+        localPriceDatasource.insertPrices(response.data, ticker)
     }
 
     //returns list of found tickers

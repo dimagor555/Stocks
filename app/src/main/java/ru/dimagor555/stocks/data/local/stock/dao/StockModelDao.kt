@@ -1,8 +1,11 @@
-package ru.dimagor555.stocks.data.local.stock
+package ru.dimagor555.stocks.data.local.stock.dao
 
 import androidx.paging.PagingSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
 import io.reactivex.Flowable
+import ru.dimagor555.stocks.data.local.stock.entity.StockModel
 
 @Dao
 interface StockModelDao {
@@ -31,26 +34,7 @@ interface StockModelDao {
     )
     fun findTickersByTickerOrCompanyName(query: String): List<String>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertStockBaseModel(baseModel: StockBaseModel)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertStockPriceModel(priceModel: StockPriceModel): Long
-
-    @Update
-    fun updateStockBaseModel(baseModel: StockBaseModel)
-
-    @Update
-    fun updateStockPriceModel(priceModel: StockPriceModel)
-
-    @Transaction
-    @Query("select * from stocks where ticker = :ticker")
-    fun getStockByTicker(ticker: String): StockModel?
-
     @Transaction
     @Query("select * from stocks where ticker = :ticker")
     fun getStockFlowableByTicker(ticker: String): Flowable<StockModel?>
-
-    @Query("select exists(select ticker from stocks where ticker = :ticker)")
-    fun hasStockWithTicker(ticker: String): Boolean
 }

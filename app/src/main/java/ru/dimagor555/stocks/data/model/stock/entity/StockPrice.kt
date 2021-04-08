@@ -1,9 +1,11 @@
-package ru.dimagor555.stocks.data.model.stock
+package ru.dimagor555.stocks.data.model.stock.entity
 
+import ru.dimagor555.stocks.data.model.PriceFormatter
 import java.text.DecimalFormat
 import java.time.Clock
 import java.time.DayOfWeek
 import java.time.LocalDate
+import kotlin.math.abs
 
 data class StockPrice constructor(
     private var _currPriceInCents: Int = 0,
@@ -37,13 +39,13 @@ data class StockPrice constructor(
 
     val currPrice: String?
         get() = if (!isEmpty) {
-            priceInCentsToString(_currPriceInCents)
+            PriceFormatter.formatPriceInCentsToString(_currPriceInCents)
         } else {
             null
         }
     val deltaPrice: String?
         get() = if (!isEmpty) {
-            priceInCentsToString(deltaPriceInCents)
+            PriceFormatter.formatPriceInCentsToString(deltaPriceInCents)
         } else {
             null
         }
@@ -51,17 +53,12 @@ data class StockPrice constructor(
         get() = if (!isEmpty) {
             val decimalFormat = DecimalFormat("#.##")
             decimalFormat.format(
-                (Math.abs(deltaPriceInCents)
+                (abs(deltaPriceInCents)
                         / (_previousClosePriceInCents / 100f)).toDouble()
             )
         } else {
             null
         }
-
-    private fun priceInCentsToString(price: Int): String {
-        val decimalFormat = DecimalFormat("#.##")
-        return decimalFormat.format(Math.abs(price) / 100.0)
-    }
 
     val isDeltaPricePositive: Boolean
         get() = deltaPriceInCents >= 0

@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import ru.dimagor555.stocks.data.model.searchhistory.SearchHistoryRepository;
 import ru.dimagor555.stocks.data.model.searchhistory.SearchHistoryRequest;
-import ru.dimagor555.stocks.data.model.stock.Stock;
+import ru.dimagor555.stocks.data.model.stock.entity.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockRepository;
 import ru.dimagor555.stocks.data.model.stock.StockSearcher;
 import ru.dimagor555.stocks.ui.StocksBaseViewModel;

@@ -13,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import kotlinx.coroutines.CoroutineScope;
-import ru.dimagor555.stocks.data.model.stock.Stock;
+import ru.dimagor555.stocks.data.model.stock.entity.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockRepository;
 
 import javax.inject.Inject;
@@ -52,7 +52,7 @@ public class StocksBaseViewModel extends ViewModel {
                         this::handleError));
     }
 
-    private void handleError(Throwable throwable) {
+    protected void handleError(Throwable throwable) {
         Log.e(getClass().getName(), throwable.getMessage(), throwable);
     }
 

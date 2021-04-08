@@ -2,6 +2,7 @@ package ru.dimagor555.stocks.data.model.stock;
 
 import androidx.paging.PagingData;
 import io.reactivex.Flowable;
+import ru.dimagor555.stocks.data.model.stock.entity.Stock;
 
 import java.util.List;
 

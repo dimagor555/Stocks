@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PagingData;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import ru.dimagor555.stocks.data.model.stock.Stock;
+import ru.dimagor555.stocks.data.model.stock.entity.Stock;
 import ru.dimagor555.stocks.data.model.stock.StockRepository;
 import ru.dimagor555.stocks.ui.StocksBaseViewModel;
 

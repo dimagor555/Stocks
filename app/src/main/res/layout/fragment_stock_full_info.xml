@@ -172,13 +172,6 @@
                         android:text="@string/week"
                         style="?attr/materialButtonOutlinedStyle"/>
 
-                <com.google.android.material.button.MaterialButton
-                        android:id="@+id/full_info_frag_btn_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/day"
-                        style="?attr/materialButtonOutlinedStyle"/>
-
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.button.MaterialButton

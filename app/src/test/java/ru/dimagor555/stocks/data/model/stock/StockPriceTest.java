@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import ru.dimagor555.stocks.data.model.stock.entity.StockPrice;
 
 import java.time.Clock;
 import java.time.LocalDate;

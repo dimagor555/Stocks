@@ -18,7 +18,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import ru.dimagor555.stocks.R
-import ru.dimagor555.stocks.data.model.stock.Stock
+import ru.dimagor555.stocks.data.model.price.Interval
+import ru.dimagor555.stocks.data.model.stock.entity.Stock
 
 @AndroidEntryPoint
 class StockFullInfoFragment : Fragment() {
@@ -36,6 +37,14 @@ class StockFullInfoFragment : Fragment() {
     private lateinit var btnBack: View
     private lateinit var btnFavourite: View
     private lateinit var ivFavourite: ImageView
+
+    private val currInterval
+        get() = when (toggleGroup.checkedButtonId) {
+            R.id.full_info_frag_btn_week -> Interval.WEEK
+            R.id.full_info_frag_btn_month -> Interval.MONTH
+            R.id.full_info_frag_btn_Year -> Interval.YEAR
+            else -> Interval.WEEK
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,7 +78,10 @@ class StockFullInfoFragment : Fragment() {
     }
 
     private fun initToggleGroup() {
-        toggleGroup.check(R.id.full_info_frag_btn_day)
+        toggleGroup.check(R.id.full_info_frag_btn_week)
+        toggleGroup.addOnButtonCheckedListener { _, _, _ ->
+            viewModel.loadPricesData(args.ticker, currInterval)
+        }
     }
 
     private fun initHeaderBtns() {
@@ -80,7 +92,11 @@ class StockFullInfoFragment : Fragment() {
         chartPrices.data = LineData(listOf())
         chartPrices.description = null
         chartPrices.background = null
-        chartPrices.setTouchEnabled(false)
+        chartPrices.setDrawGridBackground(false)
+        chartPrices.setTouchEnabled(true)
+        chartPrices.setScaleEnabled(false)
+        chartPrices.setPinchZoom(false)
+        chartPrices.isDoubleTapToZoomEnabled = false
 
         chartPrices.xAxis.isEnabled = false
         chartPrices.axisLeft.isEnabled = false
@@ -89,10 +105,17 @@ class StockFullInfoFragment : Fragment() {
         chartPrices.legend.isEnabled = false
 
         chartPrices.setNoDataText("")
+
+        val priceMarker = PriceMarkerView(context)
+        priceMarker.chartView = chartPrices
+        chartPrices.marker = priceMarker
+
+        chartPrices.extraTopOffset = 100f
     }
 
     private fun bindViewModel() {
-        viewModel.loadStockDate(args.ticker)
+        viewModel.loadStockData(args.ticker)
+        viewModel.loadPricesData(args.ticker, currInterval)
 
         viewModel.currStock.observe(viewLifecycleOwner, {
             if (it != null) bindStock(stock = it)
@@ -102,6 +125,7 @@ class StockFullInfoFragment : Fragment() {
         viewModel.chartDataSet.observe(viewLifecycleOwner, {
             it?.let {
                 chartPrices.data = LineData(it)
+                chartPrices.notifyDataSetChanged()
                 chartPrices.invalidate()
             }
         })
@@ -183,6 +207,7 @@ class StockFullInfoFragment : Fragment() {
         setBuyBtnPrice("")
         ivFavourite.setImageDrawable(null)
         btnFavourite.setOnClickListener(null)
+        chartPrices.clear()
     }
 
     private fun setBuyBtnPrice(price: String?) {

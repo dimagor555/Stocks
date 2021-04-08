@@ -20,7 +20,9 @@ sealed class RemoteRequest(private val priority: RequestPriority) : Comparable<R
 
     data class Price(val ticker: String) : RemoteRequest(RequestPriority.PRICE)
 
+    data class Prices(val ticker: String, val from: Long) : RemoteRequest(RequestPriority.PRICES)
+
     enum class RequestPriority {
-        ALL_STOCKS, SEARCH, COMPANY_INFO, PRICE
+        ALL_STOCKS, SEARCH, COMPANY_INFO, PRICE, PRICES
     }
 }

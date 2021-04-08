@@ -1,42 +1,66 @@
 package ru.dimagor555.stocks.ui.fullinfo
 
-import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ru.dimagor555.stocks.data.model.stock.Stock
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import ru.dimagor555.stocks.data.model.price.Interval
+import ru.dimagor555.stocks.data.model.price.PriceRepository
 import ru.dimagor555.stocks.data.model.stock.StockRepository
+import ru.dimagor555.stocks.data.model.stock.entity.Stock
 import ru.dimagor555.stocks.ui.StocksBaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FullInfoViewModel @Inject constructor(
-    stockRepository: StockRepository
+    stockRepository: StockRepository,
+    private val priceRepository: PriceRepository,
+    private val lineDataSetFactory: LineDataSetFactory,
 ) : StocksBaseViewModel(stockRepository) {
     private val currStockLiveData = MutableLiveData<Stock?>(null)
     private val chartDataSetLiveData = MutableLiveData<LineDataSet?>(null)
+
+    private var currInterval: Interval? = null
+    private val checkedIntervals = HashSet<Interval>()
+
+    private var pricesDisposable: Disposable? = null
 
     val currStock
         get() = currStockLiveData as LiveData<Stock?>
     val chartDataSet
         get() = chartDataSetLiveData as LiveData<LineDataSet?>
 
-    fun loadStockDate(ticker: String) {
+    fun loadStockData(ticker: String) {
         redirectFlowableToLiveData(
             stockRepository.getStockByTicker(ticker),
             currStockLiveData
         )
+    }
 
-        val values = listOf(Entry(1f, 50f), Entry(2f, 600f))
-        val dataSet = LineDataSet(values, null)
-        dataSet.setDrawValues(false)
-        dataSet.setDrawIcons(false)
-        dataSet.setDrawCircles(false)
-        dataSet.color = Color.BLACK
-        dataSet.lineWidth = 2f
+    fun loadPricesData(ticker: String, interval: Interval) {
+        if (interval == currInterval) return
 
-        chartDataSetLiveData.value = dataSet
+        val pricesFlowable =
+            if (checkedIntervals.contains(interval))
+                priceRepository.getPricesByTickerFromTime(ticker, interval, false)
+            else priceRepository.getPricesByTickerFromTime(ticker, interval)
+
+        checkedIntervals += interval
+        pricesDisposable?.dispose()
+
+        pricesDisposable =
+            pricesFlowable
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        if (it.isNotEmpty()) {
+                            val dataSet = lineDataSetFactory.create(it, interval)
+                            chartDataSetLiveData.postValue(dataSet)
+                        }
+                    },
+                    this::handleError
+                )
     }
 }

@@ -18,6 +18,5 @@
     <string name="year">Год</string>
     <string name="month">Месяц</string>
     <string name="week">Неделя</string>
-    <string name="day">День</string>
     <string name="buy_for">Купить за</string>
 </resources>

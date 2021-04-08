@@ -1,4 +1,4 @@
-package ru.dimagor555.stocks.data.local.stock
+package ru.dimagor555.stocks.data.local.stock.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
